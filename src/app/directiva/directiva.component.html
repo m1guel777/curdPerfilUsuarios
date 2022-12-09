@@ -1,0 +1,14 @@
+
+<div class="card">
+  <div class="card-header">
+    <p>directiva works!</p>
+    <button type="button" class="btn btn-primary my-3" (click)="habilitar= (habilitar==true)? false:true;">ocultar</button>
+
+  </div>
+
+  <ul class="list-group" *ngIf="habilitar">
+    <li class="list-group-item" *ngFor="let item of listaCurso">
+      {{item}}
+    </li>
+  </ul>
+</div>
