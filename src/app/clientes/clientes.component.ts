@@ -18,16 +18,14 @@ export class ClientesComponent implements OnInit {
   ngOnInit(): void {
     this.clienteServ.getPerfiles()
       .subscribe(arg => {
+        debugger;
         this.clienteResult = arg;
         this.clientes = this.clienteResult.lstResultado;
         console.log(arg);
       });
-
-
   }
 
   deleteCliente(cliente: Cliente): void{
-
     Swal.fire({
       title: 'Are you sure?',
       text: `¿seguro desse eliminar al cliente ${cliente.nombre}?`,
@@ -39,13 +37,23 @@ export class ClientesComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.clienteServ.delete(cliente.id).subscribe
-        (response => {
-          this.clientes = this.clientes.filter(cli => cli!==cliente)
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
+        (clienteResult => {
+          if(clienteResult.error){
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'error al eliminar al usuario',
+              footer: '<a href="">Why do I have this issue?</a>'
+            })
+          }else{
+            this.clientes = this.clientes.filter(cli => cli!==cliente)
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+
+          }
         })
       }
     })

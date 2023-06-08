@@ -12,6 +12,9 @@ export class DirectivaComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
   }
+
+
 
 }

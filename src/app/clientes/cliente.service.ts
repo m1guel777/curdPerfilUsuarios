@@ -14,15 +14,16 @@ export class ClienteService{
 
   constructor(private http: HttpClient, private router: Router){}
 
-  getPerfiles(): Observable<ClienteResult>{
-    return this.http.get<ClienteResult>(this.endPoint).pipe(
+  getPerfiles(): Observable<any>{
+    return this.http.get<any>(this.endPoint).pipe(
+
       catchError(e =>{
         this.router.navigate(['/inicio']);
         console.log(e);
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: e,
+          text: 'error getting listing of clients',
           footer: '<a href="">Why do I have this issue?</a>'
         })
         return throwError(e);
@@ -30,35 +31,35 @@ export class ClienteService{
     );
   }
 
-  createCliente(clienes: Cliente): Observable<Cliente>{
+  createCliente(clienes: Cliente): Observable<any>{
 
     let headers = this.headersPost  ();
 
     //pipe se utiliza para el catch y el catch detecta los status del back
-    return this.http.post<Cliente>(this.endPoint, clienes).pipe(
-      catchError(e =>{
-        this.router.navigate(['/clientes']);
+    return this.http.post<any>(this.endPoint, clienes).pipe(
+      catchError(e => {
+        console.log("createCliente",e);
         Swal.fire({
           icon: 'error',
-          title: 'Oops...',
-          text: e,
-          footer: '<a href="">Why do I have this issue?</a>'
+          title: `${e.error.mensaje}`,
+          text: `${e.error.error}`,
+          footer: '<a href="">ir al inicio</a>'
         })
-        console.log(e);
-      return throwError(e);
+        return throwError(e);
       })
-    );}
+    );
+    }
 
-  getClienteByid(id): Observable<Cliente>{
-    return this.http.get<Cliente>(`${this.endPoint}${id}`).pipe(
+  getClienteByid(id): Observable<any>{
+    return this.http.get<any>(`${this.endPoint}${id}`).pipe(
 
       catchError(e =>{
         console.log("getbyid",e);
         this.router.navigate(['/clientes']);
         Swal.fire({
           icon: 'error',
-          title: 'Oops...',
-          text: `${e.error.codigoError}`,
+          title: `${e.error.mensaje}`,
+          text: `${e.error.error}`,
           footer: '<a href="">ir al inicio</a>'
         })
         console.log(e);
@@ -67,10 +68,23 @@ export class ClienteService{
     )
     ;}
 
-  updateCliente(cliente: Cliente): Observable<Cliente>{
+  updateCliente(cliente: Cliente): Observable<any>{
     let headers = this.headersPost();
 
-    return this.http.put<Cliente>(`${this.endPoint}${cliente.id}`, cliente);
+    return this.http.put<any>(`${this.endPoint}${cliente.id}`, cliente).pipe(
+      catchError(e =>{
+        console.log("updateCliente",e);
+        this.router.navigate(['/clientes']);
+        Swal.fire({
+          icon: 'error',
+          title: `${e.error.mensaje}`,
+          text: `${e.error.error}`,
+          footer: '<a href="">ir al inicio</a>'
+        })
+        console.log(e);
+      return throwError(e);
+      })
+    );
   }
 
     public headersPost() {
@@ -84,8 +98,22 @@ export class ClienteService{
       return { headers };
     }
 
-    delete(id: number) : Observable<Cliente>{
-      return this.http.delete<Cliente>(`${this.endPoint}${id}`);
-    }
+       delete(id: number) : Observable<any>{
+      return this.http.delete<any>(`${this.endPoint}${id}`).pipe(
+
+        catchError(e =>{
+          console.log("delete",e);
+          this.router.navigate(['/clientes']);
+          Swal.fire({
+            icon: 'error',
+            title: `${e.error.mensaje}`,
+            text: `${e.error.error}`,
+            footer: '<a href="">ir al inicio</a>'
+          })
+          console.log(e);
+        return throwError(e);
+        })
+
+    );}
 
 }
