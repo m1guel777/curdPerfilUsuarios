@@ -22,7 +22,7 @@ export class FormComponent implements OnInit {
   }
   public titulo: string ='crear cliente';
   clienteResult: any;
-
+  public errores: string[];
 
   constructor(private clienteServ: ClienteService ,
     private router: Router,
@@ -40,7 +40,7 @@ export class FormComponent implements OnInit {
 
       Swal.fire({
         icon: 'success',
-        title: `se ha creado el cliente ${this.clienteResult.perfil.nombre} correctamente`,
+        title: `Cliente : ${this.clienteResult.nombre}. Resgistrado con exito` ,
         showConfirmButton: false,
         timer: 3500
       })
@@ -62,6 +62,9 @@ export class FormComponent implements OnInit {
       // }
 
 
+    }, err => {
+      this.errores = err.error.errors as string[];
+      console.log(err.error.errors)
     })
   }
 
@@ -80,10 +83,13 @@ export class FormComponent implements OnInit {
       this.router.navigate(['/clientes'])
       Swal.fire({
         icon: 'success',
-        title: `cliente ${this.clientes.nombre} se ha actualizado`,
+        title: `cliente ${cliente.perfil.nombre} se ha actualizado`,
         showConfirmButton: false,
         timer: 3500
       })
+    }, err => {
+      this.errores = err.error.errors as string[];
+      console.log(err.error.errors)
     })
   }
 
