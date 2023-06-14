@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Cliente } from './cliente';
-import { ClienteResult, LstResultado } from './clienteResult';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router} from '@angular/router';
+import { formatDate, DatePipe} from '@angular/common';
+
 
 @Injectable()
 export class ClienteService {
@@ -12,8 +13,24 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getPerfiles(): Observable<any> {
+  getPerfiles(): Observable<Cliente []> {
     return this.http.get<any>(this.endPoint).pipe(
+      map(response =>{
+
+        let clientes = response.lstResultado as Cliente [];
+        return clientes.map(cliente => {
+          cliente.nombre = cliente.nombre.toUpperCase();
+
+          // para utilizar el localedata, pipe o filter de fechas
+          // cliente.fecha_registro = formatDate(cliente.fecha_registro, 'dd-MM-yyyy', 'en-US');
+
+          // let datePipe = new DatePipe('es-US');
+          // cliente.fecha_registro = datePipe.transform(cliente.fecha_registro, 'M/d/yyyy');
+
+
+          return cliente;
+        });
+      }),
       catchError((e) => {
         this.router.navigate(['/inicio']);
         console.log(e);
@@ -125,5 +142,31 @@ export class ClienteService {
         return throwError(e);
       })
     );
+  }
+
+  uploadFile(file: File, id: number): Observable<Cliente>{
+    let formData = new FormData();
+
+    debugger;
+    formData.append("archivo", file);
+
+    return this.http.post(`${this.endPoint}upload/${id}`, formData).pipe(
+      map( (response:any) => response.perfil as Cliente),
+
+      catchError(e =>{
+
+        console.log(e);
+
+        Swal.fire({
+          icon: 'error',
+          title: `${e.error.mensaje}`,
+          text: `${e.error.error}`,
+          footer: '<a href="">ir al inicio</a>',
+        });
+
+        return throwError(e);
+      })
+    );
+
   }
 }

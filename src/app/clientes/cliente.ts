@@ -5,4 +5,5 @@ export class Cliente{
   activo: boolean;
   fecha_registro: string;
   fecha_modificacion:string;
+  foto:string;
 }

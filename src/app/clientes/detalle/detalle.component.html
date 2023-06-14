@@ -1,0 +1,17 @@
+<div class="card bg-dark text-white mt-5">
+  <div class="card-header d-flex justify-content-center">Upload files</div>
+
+  <div class="card-body ">
+
+    <div class="input-group">
+      <input (change)="pictureSelected($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" >
+
+
+      <button class="btn btn-outline-success" type="button" id="inputGroupFileAddon04" (click)="upload()">
+        <i class="bi bi-cloud-upload"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+

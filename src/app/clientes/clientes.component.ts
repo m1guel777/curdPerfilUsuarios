@@ -19,9 +19,8 @@ export class ClientesComponent implements OnInit {
     this.clienteServ.getPerfiles()
       .subscribe(arg => {
         debugger;
-        this.clienteResult = arg;
-        this.clientes = this.clienteResult.lstResultado;
-        console.log(arg);
+        this.clientes = arg;
+        //let is a var of emac scrip 6
       });
   }
 
@@ -55,8 +54,7 @@ export class ClientesComponent implements OnInit {
 
           }
         })
-      }
-    })
+      }})
 
   }
 

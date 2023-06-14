@@ -18,7 +18,8 @@ export class FormComponent implements OnInit {
     descripcion: '',
     activo: true,
     fecha_registro: '',
-    fecha_modificacion: ''
+    fecha_modificacion: '',
+    foto: ''
   }
   public titulo: string ='crear cliente';
   clienteResult: any;
