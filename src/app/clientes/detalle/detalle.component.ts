@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 export class DetalleComponent implements OnInit {
 
   cliente: Cliente;
+  modelSelected:'';
 
   private fotoSelected: File;
 
@@ -33,24 +34,47 @@ export class DetalleComponent implements OnInit {
   }
 
   pictureSelected(event){
-    debugger;
     this.fotoSelected= event.target.files[0];
-    console.log("foto selectded ", this.fotoSelected);
+    console.log("foto selectded", this.fotoSelected);
+    console.log("foto model", this.modelSelected);
+
+    if(this.fotoSelected.type.indexOf('image')<0){
+      this.fotoSelected=null;
+      this.modelSelected=null;
+
+      Swal.fire({
+        icon: 'error',
+        title: `Error al seleccionar imagen`,
+        text: `Archivo debe ser de tipo imagen`,
+        footer: '<a href="">ir al inicio</a>',
+      });
+
+
+    }
 
   }
 
   upload(){
-    this.cliServ.uploadFile(this.fotoSelected, this.cliente.id).subscribe(
-      cli => {
-        this.cliente= cli;
+    if(this.fotoSelected!=null){
+      this.cliServ.uploadFile(this.fotoSelected, this.cliente.id).subscribe(
+        cli => {
+          this.cliente= cli;
 
-        Swal.fire({
-          icon: 'success',
-          title: `cliente ${this.cliente.nombre} se ha actualizado`,
-          showConfirmButton: false,
-          timer: 3500
-        })      }
-    );
+          Swal.fire({
+            icon: 'success',
+            title: `cliente ${this.cliente.foto} se ha actualizado`,
+            showConfirmButton: false,
+            timer: 3500
+          })      }
+      );
+    }else{
+      Swal.fire({
+        icon: 'error',
+        title: `Error al enviar foto`,
+        text: `Foto no existe`,
+        footer: '<a href="">ir al inicio</a>',
+      });
+    }
   }
 
 }

@@ -3,14 +3,32 @@
 
   <div class="card-body ">
 
-    <div class="input-group">
-      <input (change)="pictureSelected($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" >
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
 
+          <ul class="list-group text-dark mb-3" >
+            <li class="list-group-item">{{cliente?.nombre}}</li>
+            <li class="list-group-item">{{cliente?.descripcion}}</li>
+            <li class="list-group-item">{{cliente?.foto}}</li>
 
-      <button class="btn btn-outline-success" type="button" id="inputGroupFileAddon04" (click)="upload()">
-        <i class="bi bi-cloud-upload"></i>
-      </button>
+          </ul>
+
+          <div class="input-group">
+            <input (change)="pictureSelected($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" [(ngModel)]="modelSelected">
+            <button class="btn btn-outline-success" type="button" id="inputGroupFileAddon04" (click)="upload()">
+              <i class="bi bi-cloud-upload"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-sm">
+          <img *ngIf="cliente?.foto" src="http://localhost:8090/api/perfil/upload/img/{{cliente.foto}}" alt="" class="img-thumbnail rounded">
+        </div>
+      </div>
     </div>
+
+
+
 
   </div>
 </div>

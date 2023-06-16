@@ -146,8 +146,6 @@ export class ClienteService {
 
   uploadFile(file: File, id: number): Observable<Cliente>{
     let formData = new FormData();
-
-    debugger;
     formData.append("archivo", file);
 
     return this.http.post(`${this.endPoint}upload/${id}`, formData).pipe(
