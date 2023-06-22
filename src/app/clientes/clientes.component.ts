@@ -3,6 +3,7 @@ import { Cliente } from './cliente';
 import {ClienteResult} from './clienteResult';
 import { ClienteService } from './cliente.service';
 import Swal from 'sweetalert2';
+import { ModalServiceService } from './detalle/modal-service.service';
 
 @Component({
   selector: 'app-clientes',
@@ -12,8 +13,10 @@ export class ClientesComponent implements OnInit {
 
   clientes: Cliente[];
   clienteResult: ClienteResult;
+  clienteSeleccionado:Cliente;
 
-  constructor(private clienteServ: ClienteService ) { }
+  constructor(private clienteServ: ClienteService,
+    private sModal:ModalServiceService ) { }
 
   ngOnInit(): void {
     this.clienteServ.getPerfiles()
@@ -65,4 +68,10 @@ export class ClientesComponent implements OnInit {
       'question'
     )  }
 
+    showModal(cli : Cliente){
+      this.clienteSeleccionado= cli;
+
+      this.sModal.showModal();
+
+    }
 }

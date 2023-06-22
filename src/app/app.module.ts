@@ -25,7 +25,7 @@ const routes: Routes =[
 {path:'inicio', component:InicioComponent},
 {path:'clientes/formulario', component:FormComponent},
 {path:'clientes/formulario/:id', component:FormComponent},
-{path:'clientes/detalle/:id', component:DetalleComponent}
+//{path:'clientes/detalle/:id', component:DetalleComponent}
 
 ];
 

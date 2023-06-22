@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Cliente } from './cliente';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -144,27 +144,16 @@ export class ClienteService {
     );
   }
 
-  uploadFile(file: File, id: number): Observable<Cliente>{
+  uploadFile(file: File, id: number): Observable<HttpEvent<{}>>{
     let formData = new FormData();
     formData.append("archivo", file);
 
-    return this.http.post(`${this.endPoint}upload/${id}`, formData).pipe(
-      map( (response:any) => response.perfil as Cliente),
+    const req = new HttpRequest('POST', `${this.endPoint}upload/${id}`, formData, {
+      reportProgress: true
+    });
 
-      catchError(e =>{
 
-        console.log(e);
-
-        Swal.fire({
-          icon: 'error',
-          title: `${e.error.mensaje}`,
-          text: `${e.error.error}`,
-          footer: '<a href="">ir al inicio</a>',
-        });
-
-        return throwError(e);
-      })
-    );
+    return this.http.request(req) ;
 
   }
 }

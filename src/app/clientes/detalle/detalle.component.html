@@ -1,35 +1,57 @@
-<div class="card bg-dark text-white mt-5">
-  <div class="card-header d-flex justify-content-center">Upload files</div>
 
-  <div class="card-body ">
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm">
-
-          <ul class="list-group text-dark mb-3" >
-            <li class="list-group-item">{{cliente?.nombre}}</li>
-            <li class="list-group-item">{{cliente?.descripcion}}</li>
-            <li class="list-group-item">{{cliente?.foto}}</li>
-
-          </ul>
-
-          <div class="input-group">
-            <input (change)="pictureSelected($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" [(ngModel)]="modelSelected">
-            <button class="btn btn-outline-success" type="button" id="inputGroupFileAddon04" (click)="upload()">
-              <i class="bi bi-cloud-upload"></i>
-            </button>
-          </div>
+<div class="modal-is-open animation fade-in" *ngIf="sModal.modal">
+  <div  class="modal" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Uploads files modal</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="col-sm">
-          <img *ngIf="cliente?.foto" src="http://localhost:8090/api/perfil/upload/img/{{cliente.foto}}" alt="" class="img-thumbnail rounded">
+        <div class="modal-body">
+
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+
+                <ul class="list-group text-dark mb-3" >
+                  <li class="list-group-item">{{cliente?.nombre}}</li>
+                  <li class="list-group-item">{{cliente?.descripcion}}</li>
+                  <li class="list-group-item">{{cliente?.foto}}</li>
+
+                </ul>
+
+                <div class="input-group mb-3" >
+                  <input (change)="pictureSelected($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" [(ngModel)]="modelSelected">
+                  <button class="btn btn-outline-success" type="button" id="inputGroupFileAddon04" (click)="upload()">
+                    <i class="bi bi-cloud-upload"></i>
+                  </button>
+                </div>
+
+                <div *ngIf="progress >0" class="progress mb-3">
+                  <div class="progress-bar progress-bar-striped" role="progressbar"  [ngStyle]="{width:progress+ '%'}" attr.aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">
+                    {{progress}}%
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-sm">
+                <img *ngIf="cliente?.foto" src="http://localhost:8090/api/perfil/upload/img/{{cliente.foto}}" alt="" class="img-thumbnail rounded">
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal()">Close</button>
         </div>
       </div>
     </div>
-
-
-
-
   </div>
 </div>
+
+
 

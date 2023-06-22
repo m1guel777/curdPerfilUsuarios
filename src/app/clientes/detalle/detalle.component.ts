@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Cliente } from '../cliente';
 import { ClienteService } from '../cliente.service';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { HttpEventType } from '@angular/common/http';
+import { ModalServiceService } from './modal-service.service';
 
 @Component({
   selector: 'app-detalle',
@@ -11,26 +13,17 @@ import Swal from 'sweetalert2';
 })
 export class DetalleComponent implements OnInit {
 
-  cliente: Cliente;
+  @Input() cliente: Cliente;
   modelSelected:'';
+  progress: number=0;
 
   private fotoSelected: File;
 
   constructor(private cliServ: ClienteService,
-    private actRoute: ActivatedRoute) { }
+    private actRoute: ActivatedRoute,
+    public sModal: ModalServiceService) { }
 
   ngOnInit(): void {
-    this.actRoute.paramMap.subscribe(params =>{
-      let id:number = +params.get('id');
-
-      debugger;
-      if(id){
-        this.cliServ.getClienteByid(id).subscribe(cli =>{
-          this.cliente= cli;
-        });
-      }
-
-    })
   }
 
   pictureSelected(event){
@@ -39,9 +32,8 @@ export class DetalleComponent implements OnInit {
     console.log("foto model", this.modelSelected);
 
     if(this.fotoSelected.type.indexOf('image')<0){
-      this.fotoSelected=null;
-      this.modelSelected=null;
 
+      this.clearData();
       Swal.fire({
         icon: 'error',
         title: `Error al seleccionar imagen`,
@@ -57,15 +49,25 @@ export class DetalleComponent implements OnInit {
   upload(){
     if(this.fotoSelected!=null){
       this.cliServ.uploadFile(this.fotoSelected, this.cliente.id).subscribe(
-        cli => {
-          this.cliente= cli;
+        event => {
 
-          Swal.fire({
-            icon: 'success',
-            title: `cliente ${this.cliente.foto} se ha actualizado`,
-            showConfirmButton: false,
-            timer: 3500
-          })      }
+          if(event.type === HttpEventType.UploadProgress){
+            this.progress = Math.round(event.loaded / event.total)*100;
+          }else if(event.type === HttpEventType.Response){
+            let response:any = event.body
+            this.cliente = response.perfil as Cliente
+
+            Swal.fire({
+              icon: 'success',
+              title: `cliente ${this.cliente.foto} se ha actualizado`,
+              showConfirmButton: false,
+              timer: 3500
+            })
+          }
+
+
+
+        }
       );
     }else{
       Swal.fire({
@@ -76,5 +78,21 @@ export class DetalleComponent implements OnInit {
       });
     }
   }
+
+  closeModal(){
+    this.sModal.closeModal();
+    this.clearData();
+  }
+
+  clearData(){
+    this.fotoSelected=null;
+      this.modelSelected=null;
+      this.progress =0;
+
+  }
+
+
+
+
 
 }
