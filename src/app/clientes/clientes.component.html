@@ -25,9 +25,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
-          <td>
+          <td (click)="showModal(cliente)" >
             <img *ngIf="cliente?.foto" src="http://localhost:8090/api/perfil/upload/img/{{cliente.foto}}" alt="" class="img-thumbnail rounded"
             style="width: 64px; cursor: pointer;">
+
+            <i *ngIf="!cliente?.foto" class="bi bi-person-fill-slash d-flex justify-content-center align-items-center mt-3"  ></i>
+
           </td>
           <td>{{cliente.nombre}}</td>
           <td>{{cliente.descripcion}}</td>
@@ -42,11 +45,6 @@
               <button  class="btn btn-success btn-sm me-2" [routerLink]="['/clientes/formulario', cliente.id]">
                 <i class="bi bi-pencil-square"></i>
               </button>
-
-              <button  class="btn btn-success btn-sm me-2" (click)="showModal(cliente)">
-                <i class="bi bi-eye"></i>
-              </button>
-
             </div>
           </td>
         </tr>
