@@ -25,9 +25,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes">
-          <td (click)="showModal(cliente)" >
+          <td (click)="showModal(cliente)" style="cursor: pointer;" >
             <img *ngIf="cliente?.foto" src="http://localhost:8090/api/perfil/upload/img/{{cliente.foto}}" alt="" class="img-thumbnail rounded"
-            style="width: 64px; cursor: pointer;">
+            style="width: 64px;">
 
             <i *ngIf="!cliente?.foto" class="bi bi-person-fill-slash d-flex justify-content-center align-items-center mt-3"  ></i>
 
@@ -55,3 +55,8 @@
 
   </div>
 </div>
+
+
+
+
+

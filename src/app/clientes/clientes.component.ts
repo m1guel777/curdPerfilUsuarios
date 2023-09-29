@@ -25,6 +25,17 @@ export class ClientesComponent implements OnInit {
         this.clientes = arg;
         //let is a var of emac scrip 6
       });
+
+
+      this.sModal.isUpload.subscribe(cliente =>{
+        this.clientes= this.clientes.map(clienteOriginal => {
+          if(cliente.id== clienteOriginal.id){
+            clienteOriginal.foto= cliente.foto;
+          }
+          return clienteOriginal;
+        })
+      })
+
   }
 
   deleteCliente(cliente: Cliente): void{
@@ -66,12 +77,13 @@ export class ClientesComponent implements OnInit {
       'The Internet?',
       'That thing is still around?',
       'question'
-    )  }
+    )
+  }
 
-    showModal(cli : Cliente){
-      this.clienteSeleccionado= cli;
+  showModal(area : Cliente){
+    this.clienteSeleccionado= area;
 
-      this.sModal.showModal();
+    this.sModal.showModal();
 
-    }
+  }
 }

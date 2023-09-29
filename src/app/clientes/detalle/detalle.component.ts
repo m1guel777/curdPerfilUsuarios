@@ -57,6 +57,7 @@ export class DetalleComponent implements OnInit {
             let response:any = event.body
             this.cliente = response.perfil as Cliente
 
+            this.sModal.isUpload.emit(this.cliente);
             Swal.fire({
               icon: 'success',
               title: `cliente ${this.cliente.foto} se ha actualizado`,
